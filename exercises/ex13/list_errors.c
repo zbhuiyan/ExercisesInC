@@ -78,6 +78,7 @@ int pop(Node **list) {
 void push(Node **list, int val) {
     Node *new_node = make_node(val, *list);
     *list = new_node;
+    free(new_node);
 }
 
 
@@ -178,6 +179,7 @@ Node *make_something() {
     node3->next = node2;
 
     return node3;
+
 }
 
 
@@ -200,6 +202,14 @@ int main() {
     printf("test_list\n");
     print_list(&test_list);
 
+    //free list
+    Node *temp;
+    while(test_list) {
+        temp = test_list->next;
+        free(test_list);
+        test_list = temp;
+    }
+
     // make an empty list
     printf("empty\n");
     Node *empty = NULL;
@@ -209,7 +219,11 @@ int main() {
     print_list(&empty);
 
     Node *something = make_something();
-    free(something);
-
+    
+    while(something) {
+        temp = something->next;
+        free(something);
+        something = temp;
+    }
     return 0;
 }

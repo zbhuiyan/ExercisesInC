@@ -56,6 +56,8 @@ void accumulator(gpointer key, gpointer value, gpointer user_data)
         (gpointer) pair,
         (GCompareDataFunc) compare_pair,
         NULL);
+
+    free(pair);
 }
 
 /* Increments the frequency associated with key. */
@@ -67,6 +69,7 @@ void incr(GHashTable* hash, gchar *key)
         gint *val1 = g_new(gint, 1);
         *val1 = 1;
         g_hash_table_insert(hash, key, val1);
+        free(val1);
     } else {
         *val += 1;
     }
@@ -86,6 +89,7 @@ int main(int argc, char** argv)
     FILE *fp = g_fopen(filename, "r");
     if (fp == NULL) {
         perror(filename);
+        free(filename);
         exit(-10);
     }
 
@@ -106,6 +110,9 @@ int main(int argc, char** argv)
         }
     }
     fclose(fp);
+
+    g_free(array);
+    g_free(line);
 
     // print the hash table
     // g_hash_table_foreach(hash, (GHFunc) kv_printor, "Word %s freq %d\n");
